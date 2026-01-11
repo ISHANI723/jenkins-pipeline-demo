@@ -2,72 +2,60 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // Maven configured in Jenkins (Manage Jenkins → Global Tool Configuration)
+        maven 'Maven3'
     }
 
     stages {
-
         stage('Build') {
             steps {
                 echo 'Building and packaging the application using Maven'
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package'
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit and integration tests using Maven + JUnit'
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Code Analysis') {
             steps {
-                echo 'Running static code analysis using SonarQube'
-                // Example command (simulation if SonarQube is not configured)
-                echo 'sonar-scanner would be executed here'
+                echo 'Code analysis stage'
             }
         }
 
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan using OWASP Dependency-Check'
-                // Simulated security scan
-                echo 'dependency-check.sh would scan for vulnerabilities'
+                echo 'Security scan stage'
             }
         }
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying application to staging environment (AWS EC2)'
-                // Simulated deployment
-                echo 'scp target/app.jar ec2-user@staging-server:/app'
+                echo 'Deploying to staging'
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on staging environment'
-                // Simulated integration testing
-                echo 'Executing REST API tests using Postman / Newman'
+                echo 'Running integration tests on staging'
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to production environment (AWS EC2)'
-                // Simulated production deployment
-                echo 'scp target/app.jar ec2-user@production-server:/app'
+                echo 'Deploying to production'
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline executed successfully'
-        }
         failure {
             echo 'Pipeline failed'
+        }
+        success {
+            echo 'Pipeline succeeded'
         }
     }
 }
